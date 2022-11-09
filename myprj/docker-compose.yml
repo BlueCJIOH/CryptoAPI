@@ -8,3 +8,14 @@ services:
       - .:/my_api
     ports:
       - "8000:8000"
+
+#  db:
+#    container_name: my_api-db
+#    env_file:
+#      - .env
+#    image: postgres:12
+#    restart: always
+#    volumes:
+#      - ./postgres_data:/var/lib/postgresql/data/
+#    ports:
+#      - "5432:5432"
