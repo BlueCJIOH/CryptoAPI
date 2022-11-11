@@ -4,18 +4,23 @@ services:
   web:
     build: .
     container_name: my_api
+    env_file:
+      - .env
+    restart: on-failure
+    depends_on:
+      - db
     volumes:
       - .:/my_api
     ports:
       - "8000:8000"
 
-#  db:
-#    container_name: my_api-db
-#    env_file:
-#      - .env
-#    image: postgres:12
-#    restart: always
-#    volumes:
-#      - ./postgres_data:/var/lib/postgresql/data/
-#    ports:
-#      - "5432:5432"
+  db:
+    container_name: my_api-db
+    env_file:
+      - .env
+    image: postgres:12
+    restart: always
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data/
+    ports:
+      - "5432:5432"
