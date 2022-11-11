@@ -14,7 +14,7 @@ class ChangeModel(models.Model):
 class CurrencyModel(models.Model):
     name = models.CharField(max_length=10)
     value = models.FloatField()
-    change = models.ForeignKey(ChangeModel, on_delete=models.CASCADE)
+    change = models.ForeignKey(ChangeModel, on_delete=models.CASCADE, related_name='currencies')
 
     def __str__(self):
         return self.name
