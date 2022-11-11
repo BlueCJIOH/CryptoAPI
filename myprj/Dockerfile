@@ -10,7 +10,7 @@ WORKDIR /my_api
 COPY . /my_api
 
 # Install any needed packages specified in requirements.txt
-RUN pip install --upgrade pip && pip install -r requirements.txt
+RUN pip install --upgrade pip && pip install -r requirements.txt 
 
 ADD entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
