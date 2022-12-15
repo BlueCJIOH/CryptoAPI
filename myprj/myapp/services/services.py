@@ -32,11 +32,75 @@ def get_all_exchanges():
     data = {"Binance": data_binance, "Bybit": data_bybit}
     return data
 
-def get_exchange_by_name(name):
-    if name in exchange_getters:
-        return exchange_getters.get(name)()
 
-exchange_getters = {
+def get_exchange_by_name(name):
+    if name in exchange_getters_currencies:
+        return exchange_getters_currencies.get(name, 'None')()
+    else:
+        return 'Not found'
+
+
+def get_binance_by_currency(name):
+    exchange = ccxt.binance()
+    try:
+        ticker = exchange.fetch_tickers([f'{name}/USDT', ])
+        return {
+            'name': name,
+            'price': ticker.get(f'{name}/USDT')['high'],
+        }
+    except ccxt.errors.BadSymbol:
+        return {
+            'name': 'Not found',
+            'price': 'Not found',
+        }
+
+
+def get_bybit_by_currency(name):
+    exchange = ccxt.bybit()
+    try:
+        ticker = exchange.fetch_tickers([f'{name}/USDT:USDT', ])
+        return {
+            'name': name,
+            'price': ticker.get(f'{name}/USDT:USDT')['high'],
+        }
+    except ccxt.errors.BadSymbol:
+        return {
+            'name': 'Not found',
+            'price': 'Not found',
+        }
+
+
+def get_exchange_by_currency(name, cname):
+    if name in exchange_getters_currency:
+        return exchange_getters_currency.get(name)(cname)
+    else:
+        return 'Not found'
+
+def get_binance_currencies_names():
+    return set(filter(lambda x: 5 > len(x) > 1, map(lambda x: x[:-10], ccxt.binance().load_markets().keys())))
+
+def get_bybit_currencies_names():
+    return set(filter(lambda x: 5 > len(x) > 1, map(lambda x: x[:-10], ccxt.bybit().load_markets().keys())))
+
+def get_names_from_exchange(name):
+    if name in exchange_getters_currencies_names:
+        return exchange_getters_currencies_names.get(name)()
+    else:
+        return 'Not found'
+
+def get_names_from_exchanges():
+    return [{exchange[0].capitalize():exchange[1]()} for exchange in exchange_getters_currencies_names.items()]
+
+
+exchange_getters_currencies = {
     'binance': get_currencies_binance,
     'bybit': get_currencies_bybit,
+}
+exchange_getters_currency = {
+    'binance': get_binance_by_currency,
+    'bybit': get_bybit_by_currency,
+}
+exchange_getters_currencies_names = {
+    'binance': get_binance_currencies_names,
+    'bybit': get_bybit_currencies_names,
 }
