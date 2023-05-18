@@ -20,7 +20,7 @@ class ExchangeViewSet(GenericViewSet):
         'all_currencies': CurrencySerializer,
         'currencies_by_name': ExchangeSerializer,
         'all_currency_by_name': CurrencySerializer,
-        'currencies_names_from': ExchangeSerializer,
+        'currency_names_from': ExchangeSerializer,
         'currency_by_name_from': ExchangeCurrencySerializer,
     }
 
@@ -50,7 +50,7 @@ class ExchangeViewSet(GenericViewSet):
         return Response(
             {request.data['name']: get_exchange_by_currency(request.data['name'].lower(), request.data['cname'].upper())})
 
-    @action(detail=False, methods=['post'], url_path='currencies_names_from')
+    @action(detail=False, methods=['post'], url_path='currency_names_from')
     def currency_names_from(self, request):
         return Response({request.data['name']: get_names_from_exchange(request.data['name'].lower())})
 
