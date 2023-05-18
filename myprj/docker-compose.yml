@@ -6,11 +6,14 @@ services:
     container_name: my_api
     env_file:
       - .env
-    restart: on-failure
+    restart: always
     depends_on:
       - db
     volumes:
       - .:/my_api
+    networks:
+      crypto_net:
+        ipv4_address: 11.1.0.112
     ports:
       - "8000:8000"
 
@@ -22,5 +25,14 @@ services:
     restart: always
     volumes:
       - ./postgres_data:/var/lib/postgresql/data/
+    networks:
+      - crypto_net
     ports:
       - "5432:5432"
+
+networks:
+  crypto_net:
+    name: dev-network
+    ipam:
+      config:
+        - subnet: 11.1.0.0/16

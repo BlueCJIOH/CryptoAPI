@@ -1,7 +1,5 @@
-# import pybit
-# import requests
-# from pybit import inverse_perpetual
 import ccxt
+
 
 def get_currencies_bybit():
     exchange = ccxt.bybit()
@@ -76,11 +74,17 @@ def get_exchange_by_currency(name, cname):
     else:
         return 'Not found'
 
+
 def get_binance_currencies_names():
-    return set(filter(lambda x: 5 > len(x) > 1, map(lambda x: x[:-10], ccxt.binance().load_markets().keys())))
+    return [el[0] for el in
+            filter(lambda x: x[1] == 'USDT', map(lambda x: x.split('/'), ccxt.binance().load_markets().keys()))][:20]
+
 
 def get_bybit_currencies_names():
-    return set(filter(lambda x: 5 > len(x) > 1, map(lambda x: x[:-10], ccxt.bybit().load_markets().keys())))
+    return [el[0] for el in
+            filter(lambda x: x[1][:4] == 'USDT' and len(x[0]) < 4,
+                   map(lambda x: x.split('/'), ccxt.bybit().load_markets().keys()))]
+
 
 def get_names_from_exchange(name):
     if name in exchange_getters_currencies_names:
@@ -88,8 +92,9 @@ def get_names_from_exchange(name):
     else:
         return 'Not found'
 
+
 def get_names_from_exchanges():
-    return [{exchange[0].capitalize():exchange[1]()} for exchange in exchange_getters_currencies_names.items()]
+    return [{exchange[0].capitalize(): exchange[1]()} for exchange in exchange_getters_currencies_names.items()]
 
 
 exchange_getters_currencies = {
